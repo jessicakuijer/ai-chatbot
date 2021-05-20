@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="docs/chatbot.png" width="480px" alt="aino" />
+  <img src="docs/chatbot.png" width="300px" alt="aino" />
   <h3>A symfony 5 Chatbot Demo</h3>
   <p>This is a symfony 5 Chatbot Demo by using Botman. It can be used as Chatbot symfony 5 starter.</p>
 
@@ -15,8 +15,8 @@
 
 ---
 
-<img src="docs/demo1.png" width="480px" alt="aino" /><br/>
-<img src="docs/demo2.png" width="480px" alt="aino" /><br/>
+<img src="docs/demo1.png" width="300px" alt="aino" /><br/>
+<img src="docs/demo2.png" width="300px" alt="aino" /><br/>
 
 ## Install
 ```bash
