@@ -30,7 +30,7 @@ class ChatController extends AbstractController
         $botman = BotManFactory::create($config);
 
         $botman->hears(
-            'hi',
+            'hi(.*)||hello(.*)',
             function (BotMan $bot) {
                 $bot->reply('Hello, I am a Chatbot in Symfony 5!');
             }
