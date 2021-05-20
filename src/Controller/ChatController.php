@@ -10,10 +10,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ChatbotController extends AbstractController
+class ChatController extends AbstractController
 {
     /**
-     * @Route("/", name="homepage")
+     * @Route("/", name="chat_index")
      */
     public function index(): Response
     {
@@ -21,7 +21,7 @@ class ChatbotController extends AbstractController
     }
 
     /**
-     * @Route("/message", name="message")
+     * @Route("/chat/message", name="chat_message")
      */
     public function message(): Response
     {
@@ -48,10 +48,10 @@ class ChatbotController extends AbstractController
     }
 
     /**
-     * @Route("/chatframe", name="chatframe")
+     * @Route("/chat/frame", name="chat_frame")
      */
     public function chatframe(): Response
     {
-        return $this->render('chat/chatframe.html.twig');
+        return $this->render('chat/frame.html.twig');
     }
 }
