@@ -6,6 +6,7 @@ use BotMan\BotMan\BotMan;
 use BotMan\BotMan\BotManFactory;
 use BotMan\BotMan\Drivers\DriverManager;
 use BotMan\Drivers\Web\WebDriver;
+use stdClass;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -39,10 +40,9 @@ class ChatController extends AbstractController
         $botman->hears(
             'weather in {location}',
             function (BotMan $bot, string $location) {
-                $url = 'http://api.weatherstack.com/current?access_key=18895c6bcedd7b4a6194ffd07400025a&query=' . $location;
-                $response = json_decode(file_get_contents($url));
+                $response = $this->fetchWeatherData($location);
                 $bot->reply(sprintf('Weather in %s is great!', $response->location->name));
-                $bot->reply(sprintf("<img src='%s'/>", $response->current->weather_icons[0]));
+                $bot->reply(sprintf('<img src="%s" alt="icon"/>', $response->current->weather_icons[0]));
             }
         );
 
@@ -65,10 +65,10 @@ class ChatController extends AbstractController
         return $this->render('chat/frame.html.twig');
     }
 
-    private function fetchWeatherData(string $location)
+    private function fetchWeatherData(string $location): stdClass
     {
         $url = 'http://api.weatherstack.com/current?access_key=18895c6bcedd7b4a6194ffd07400025a&query=' . $location;
-        $response = json_decode(file_get_contents($url));
-        var_dump($response);
+
+        return json_decode(file_get_contents($url));
     }
 }
