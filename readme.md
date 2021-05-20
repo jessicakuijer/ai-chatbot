@@ -15,6 +15,9 @@
 
 ---
 
+<img src="docs/demo1.png" width="480px" alt="aino" /><br/>
+<img src="docs/demo2.png" width="480px" alt="aino" /><br/>
+
 ## Install
 ```bash
 composer install 
@@ -25,6 +28,12 @@ composer install
 symfony serve 
 # open https://127.0.0.1:8000
 ```
+
+
+## API used in POC
+
+<https://developers.giphy.com/dashboard/>
+
 
 ## licence
 
