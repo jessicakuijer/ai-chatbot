@@ -7,6 +7,7 @@
         "php": ">=7.2.5",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "ext-json": "*",
         "botman/botman": "^2.6",
         "botman/driver-web": "^1.5",
         "doctrine/annotations": "^1.13",
@@ -16,6 +17,7 @@
         "symfony/framework-bundle": "5.2.*",
         "symfony/maker-bundle": "^1.31",
         "symfony/twig-bundle": "5.2.*",
+        "symfony/var-dumper": "5.2.*",
         "symfony/yaml": "5.2.*",
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/twig": "^2.12|^3.0"

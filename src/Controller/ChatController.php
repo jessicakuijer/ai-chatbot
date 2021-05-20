@@ -30,9 +30,19 @@ class ChatController extends AbstractController
         $botman = BotManFactory::create($config);
 
         $botman->hears(
-            'hi(.*)||hello(.*)',
+            'hi',
             function (BotMan $bot) {
                 $bot->reply('Hello, I am a Chatbot in Symfony 5!');
+            }
+        );
+
+        $botman->hears(
+            'weather in {location}',
+            function (BotMan $bot, string $location) {
+                $url = 'http://api.weatherstack.com/current?access_key=18895c6bcedd7b4a6194ffd07400025a&query=' . $location;
+                $response = json_decode(file_get_contents($url));
+                $bot->reply(sprintf('Weather in %s is great!', $response->location->name));
+                $bot->reply(sprintf("<img src='%s'/>", $response->current->weather_icons[0]));
             }
         );
 
@@ -53,5 +63,12 @@ class ChatController extends AbstractController
     public function chatframe(): Response
     {
         return $this->render('chat/frame.html.twig');
+    }
+
+    private function fetchWeatherData(string $location)
+    {
+        $url = 'http://api.weatherstack.com/current?access_key=18895c6bcedd7b4a6194ffd07400025a&query=' . $location;
+        $response = json_decode(file_get_contents($url));
+        var_dump($response);
     }
 }
