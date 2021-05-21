@@ -27,9 +27,6 @@ class ChatController extends AbstractController
 
     /**
      * @Route("/chat/message", name="chat_message")
-     * @param SymfonyCache $symfonyCache
-     *
-     * @return Response
      */
     public function message(SymfonyCache $symfonyCache): Response
     {
@@ -106,12 +103,25 @@ class ChatController extends AbstractController
             }
         );
 
+        $botman->hears(
+            'help',
+            function (BotMan $bot) {
+                $bot->reply('This is the help information.');
+            }
+        )->skipsConversation();
+
+        $botman->hears(
+            'stop',
+            function (BotMan $bot) {
+                $bot->reply('I will stop our conversation.');
+            }
+        )->stopsConversation();
+
         // fallback, nothing matched
         // --------------------------------
         $botman->fallback(
             function (BotMan $bot) {
                 $bot->reply('Sorry, I did not understand.');
-                $bot->reply('TRY: Weather in {location}');
             }
         );
 

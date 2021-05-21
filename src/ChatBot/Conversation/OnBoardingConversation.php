@@ -13,9 +13,13 @@ final class OnBoardingConversation extends Conversation
     public function askFirstname()
     {
         $this->ask(
-            'Hello! What is your firstname?',
+            'What is your firstname?',
             function (Answer $answer) {
                 $this->firstName = $answer->getText();
+                if (strlen(trim($this->firstName)) <= 2) {
+                    $this->say('It is not a correct name. ');
+                    return $this->repeat('Please provide your real name.');
+                }
 
                 $this->say('Nice to meet you ' . $this->firstName);
                 $this->askEmail();
