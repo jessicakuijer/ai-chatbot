@@ -2,6 +2,8 @@
 
 declare(strict_types = 1);
 
+namespace App\ChatBot\Conversation;
+
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Messages\Incoming\Answer;
 

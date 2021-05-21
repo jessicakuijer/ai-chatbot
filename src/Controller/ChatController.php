@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\ChatBot\Conversation\OnBoardingConversation;
+use App\ChatBot\Conversation\QuestionConversation;
 use BotMan\BotMan\BotMan;
 use BotMan\BotMan\BotManFactory;
 use BotMan\BotMan\Cache\SymfonyCache;
@@ -9,7 +11,6 @@ use BotMan\BotMan\Drivers\DriverManager;
 use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 use BotMan\Drivers\Web\WebDriver;
-use OnBoardingConversation;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -116,6 +117,15 @@ class ChatController extends AbstractController
                 $bot->reply('I will stop our conversation.');
             }
         )->stopsConversation();
+
+        // question with buttons
+        // --------------------------------
+        $botman->hears(
+            'question',
+            function (BotMan $bot) {
+                $bot->startConversation(new QuestionConversation());
+            }
+        );
 
         // fallback, nothing matched
         // --------------------------------
