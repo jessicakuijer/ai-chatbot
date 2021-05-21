@@ -11,6 +11,7 @@
         "botman/botman": "^2.6",
         "botman/driver-web": "^1.5",
         "doctrine/annotations": "^1.13",
+        "symfony/apache-pack": "^1.0",
         "symfony/cache": "5.2.*",
         "symfony/console": "5.2.*",
         "symfony/dotenv": "5.2.*",

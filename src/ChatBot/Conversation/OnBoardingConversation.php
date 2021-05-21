@@ -7,8 +7,8 @@ use BotMan\BotMan\Messages\Incoming\Answer;
 
 final class OnBoardingConversation extends Conversation
 {
-    protected string $firstName;
-    protected string $email;
+    protected $firstName;
+    protected $email;
 
     public function askFirstname()
     {
