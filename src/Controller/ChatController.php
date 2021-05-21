@@ -4,10 +4,12 @@ namespace App\Controller;
 
 use BotMan\BotMan\BotMan;
 use BotMan\BotMan\BotManFactory;
+use BotMan\BotMan\Cache\SymfonyCache;
 use BotMan\BotMan\Drivers\DriverManager;
 use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 use BotMan\Drivers\Web\WebDriver;
+use OnBoardingConversation;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,12 +27,14 @@ class ChatController extends AbstractController
 
     /**
      * @Route("/chat/message", name="chat_message")
+     * @param SymfonyCache $symfonyCache
+     *
+     * @return Response
      */
-    public function message(): Response
+    public function message(SymfonyCache $symfonyCache): Response
     {
         DriverManager::loadDriver(WebDriver::class);
-        $config = [];
-        $botman = BotManFactory::create($config);
+        $botman = BotManFactory::create([], $symfonyCache);
 
         // basic
         // --------------------------------
@@ -40,7 +44,6 @@ class ChatController extends AbstractController
                 $bot->reply('Hello, I am a Chatbot in Symfony 5!');
             }
         );
-
 
         // remote API
         // --------------------------------
@@ -75,7 +78,6 @@ class ChatController extends AbstractController
             }
         );
 
-
         $botman->hears(
             'say my name',
             function (BotMan $bot) {
@@ -83,6 +85,26 @@ class ChatController extends AbstractController
             }
         );
 
+        // User information:
+        // botman will provide the user information by passing user object implemented UserInterface
+        // --------------------------------
+        $botman->hears(
+            'information',
+            function (BotMan $bot) {
+                $user = $bot->getUser();
+                $bot->reply('First name: ' . $user->getFirstName());
+            }
+        );
+
+        // conversation
+        // --------------------------------
+        $botman->hears(
+            'survey',
+            function (BotMan $bot) {
+                $bot->reply('I am going to start the on-boarding conversation');
+                $bot->startConversation(new OnBoardingConversation());
+            }
+        );
 
         // fallback, nothing matched
         // --------------------------------

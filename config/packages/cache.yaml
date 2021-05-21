@@ -1,5 +1,8 @@
 framework:
     cache:
+        # botman: let botman use symfony cache to cache the conversation
+        app: cache.adapter.filesystem
+
         # Unique name of your app: used to compute stable namespaces for cache keys.
         #prefix_seed: your_vendor_name/app_name
 
