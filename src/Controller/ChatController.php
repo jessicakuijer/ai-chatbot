@@ -32,6 +32,8 @@ class ChatController extends AbstractController
         $config = [];
         $botman = BotManFactory::create($config);
 
+        // basic
+        // --------------------------------
         $botman->hears(
             'hi',
             function (BotMan $bot) {
@@ -39,6 +41,9 @@ class ChatController extends AbstractController
             }
         );
 
+
+        // remote API
+        // --------------------------------
         $botman->hears(
             'weather in {location}',
             function (BotMan $bot, string $location) {
@@ -47,6 +52,9 @@ class ChatController extends AbstractController
                 $bot->reply(sprintf('Weather in %s is %s!', $response->location->name, $response->current->weather_descriptions[0]));
             }
         );
+
+        // attachment
+        // --------------------------------
         $botman->hears(
             '/gif {name}',
             function (BotMan $bot, string $name) {
@@ -57,6 +65,27 @@ class ChatController extends AbstractController
             }
         );
 
+        // data provider: user info
+        // --------------------------------
+        $botman->hears(
+            'my name is {name}',
+            function (BotMan $bot, string $name) {
+                $bot->userStorage()->save(['name' => $name]);
+                $bot->reply('Hello, ' . $name);
+            }
+        );
+
+
+        $botman->hears(
+            'say my name',
+            function (BotMan $bot) {
+                $bot->reply('Your name is ' . $bot->userStorage()->get('name'));
+            }
+        );
+
+
+        // fallback, nothing matched
+        // --------------------------------
         $botman->fallback(
             function (BotMan $bot) {
                 $bot->reply('Sorry, I did not understand.');
