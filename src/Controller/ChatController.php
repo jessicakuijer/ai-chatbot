@@ -11,6 +11,7 @@ use BotMan\BotMan\Drivers\DriverManager;
 use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 use BotMan\Drivers\Web\WebDriver;
+use ReceiveMiddleware;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,6 +34,14 @@ class ChatController extends AbstractController
     {
         DriverManager::loadDriver(WebDriver::class);
         $botman = BotManFactory::create([], $symfonyCache);
+
+        $botman->middleware->received(new ReceiveMiddleware());
+        $botman->hears(
+            '(.*)',
+            function (BotMan $bot) {
+                $bot->reply(sprintf('[%s] %s', $bot->getMessage()->getExtras('timestamp'), $bot->getMessage()->getText()));
+            }
+        );
 
         // basic
         // --------------------------------

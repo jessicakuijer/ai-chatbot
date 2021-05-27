@@ -4,11 +4,29 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://vikbert.github.io/pixss/build/styles/pixss.min.css"/>
     <title>Hello World!</title>
 </head>
 <body>
-<h1>Hello!</h1>
-<p>Click on the chat button.</p>
+<header class="header">
+    <nav class="topbar space-between">
+        <div class="burger mx-2">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div>Symfony Chatbot Demo</div>
+        <div class="mx-1">
+            <div class="emoji">
+                👨🏻‍💻
+            </div>
+        </div>
+    </nav>
+</header>
+<main class="main">
+    <div class="hero is-primary">
+    </div>
+</main>
 <script>
     var botmanWidget = {
         frameEndpoint: '{{ path("chat_frame") }}',
