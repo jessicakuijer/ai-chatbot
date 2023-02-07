@@ -4,13 +4,15 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "php": ">=7.2.5",
+        "php": "^8.0",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-json": "*",
         "botman/botman": "^2.6",
         "botman/driver-web": "^1.5",
         "doctrine/annotations": "^1.13",
+        "openai-php/client": "^0.3.0",
+        "orhanerday/open-ai": "^3.4",
         "symfony/apache-pack": "^1.0",
         "symfony/cache": "5.2.*",
         "symfony/console": "5.2.*",
@@ -29,7 +31,10 @@
         "preferred-install": {
             "*": "dist"
         },
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "symfony/flex": true
+        }
     },
     "autoload": {
         "psr-4": {
@@ -66,5 +71,9 @@
             "allow-contrib": false,
             "require": "5.2.*"
         }
+    },
+    "require-dev": {
+        "symfony/stopwatch": "5.2.*",
+        "symfony/web-profiler-bundle": "5.2.*"
     }
 }

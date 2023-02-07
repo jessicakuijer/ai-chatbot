@@ -2,23 +2,29 @@
 
 namespace App\Controller;
 
-use App\ChatBot\Conversation\OnBoardingConversation;
-use App\ChatBot\Conversation\QuestionConversation;
+use stdClass;
+use ReceiveMiddleware;
 use BotMan\BotMan\BotMan;
+use Orhanerday\OpenAi\OpenAi;
 use BotMan\BotMan\BotManFactory;
+use BotMan\Drivers\Web\WebDriver;
 use BotMan\BotMan\Cache\SymfonyCache;
 use BotMan\BotMan\Drivers\DriverManager;
 use BotMan\BotMan\Messages\Attachments\Image;
-use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
-use BotMan\Drivers\Web\WebDriver;
-use ReceiveMiddleware;
-use stdClass;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\ChatBot\Conversation\QuestionConversation;
+use App\ChatBot\Conversation\OnBoardingConversation;
+use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class ChatController extends AbstractController
-{
+{   
+    public function __construct(ParameterBagInterface $parameterBag) {
+        $this->parameterBag = $parameterBag;
+    }
+    
     /**
      * @Route("/", name="chat_index")
      */
@@ -36,22 +42,46 @@ class ChatController extends AbstractController
         $botman = BotManFactory::create([], $symfonyCache);
 
         $botman->middleware->received(new ReceiveMiddleware());
-        $botman->hears(
+       /*  $botman->hears(
             '(.*)',
             function (BotMan $bot) {
                 $bot->reply(sprintf('[%s] %s', $bot->getMessage()->getExtras('timestamp'), $bot->getMessage()->getText()));
+            }
+        ); */
+
+        $botman->hears(
+            '(.*)',
+            function (BotMan $bot, string $prompt) {
+                $open_ai_key = $this->parameterBag->get('OPENAI_API_KEY');
+                $openai = new OpenAI($open_ai_key);
+                $response = json_decode($openai->completion([
+                    'model' =>'text-davinci-003',
+                    'prompt' => $prompt,
+                    'temperature' => 0.5,
+                    'max_tokens' => 3500,
+                    'frequency_penalty' => 0.4,
+                    'presence_penalty' => 0
+                ]), true);
+                //print_r($response);
+                if(array_key_exists('choices', $response) && array_key_exists(0, $response['choices']) && array_key_exists('text', $response['choices'][0])) {
+                    $bot->typesAndWaits(2);
+                    $result = $response['choices'][0]['text'];
+                    $bot->reply($result);
+                } else {
+                    $bot->reply("Error occured in openai response");
+                }        
             }
         );
 
         // basic
         // --------------------------------
         $botman->hears(
-            'hi',
+            'hi(.*)',
             function (BotMan $bot) {
                 $bot->reply('Hello, I am a Chatbot in Symfony 5!');
             }
         );
-
+        
         // remote API
         // --------------------------------
         $botman->hears(
@@ -78,7 +108,7 @@ class ChatController extends AbstractController
         // data provider: user info
         // --------------------------------
         $botman->hears(
-            'my name is {name}',
+            'my name is {name}(.*)',
             function (BotMan $bot, string $name) {
                 $bot->userStorage()->save(['name' => $name]);
                 $bot->reply('Hello, ' . $name);
@@ -86,7 +116,7 @@ class ChatController extends AbstractController
         );
 
         $botman->hears(
-            'say my name',
+            'say my name(.*)',
             function (BotMan $bot) {
                 $bot->reply('Your name is ' . $bot->userStorage()->get('name'));
             }
@@ -96,17 +126,18 @@ class ChatController extends AbstractController
         // botman will provide the user information by passing user object implemented UserInterface
         // --------------------------------
         $botman->hears(
-            'information',
+            'information(.*)',
             function (BotMan $bot) {
                 $user = $bot->getUser();
-                $bot->reply('First name: ' . $user->getFirstName());
+                // $bot->reply('First name: ' . $user->getFirstName());
+                $bot->reply('Your name is: ' .  $bot->userStorage()->get('name'));
             }
         );
 
         // conversation
         // --------------------------------
         $botman->hears(
-            'survey',
+            'survey(.*)',
             function (BotMan $bot) {
                 $bot->reply('I am going to start the on-boarding conversation');
                 $bot->startConversation(new OnBoardingConversation());
@@ -114,14 +145,14 @@ class ChatController extends AbstractController
         );
 
         $botman->hears(
-            'help',
+            'help(.*)',
             function (BotMan $bot) {
                 $bot->reply('This is the help information.');
             }
         )->skipsConversation();
 
         $botman->hears(
-            'stop',
+            'stop(.*)',
             function (BotMan $bot) {
                 $bot->reply('I will stop our conversation.');
             }
@@ -130,7 +161,7 @@ class ChatController extends AbstractController
         // question with buttons
         // --------------------------------
         $botman->hears(
-            'question',
+            'question(.*)',
             function (BotMan $bot) {
                 $bot->startConversation(new QuestionConversation());
             }
