@@ -57,6 +57,7 @@ class ChatController extends AbstractController
                     'presence_penalty' => 0
                 ]), true);
                 //print_r($response);
+                
                 if(array_key_exists('choices', $response) && array_key_exists(0, $response['choices']) && array_key_exists('text', $response['choices'][0])) {
                     $bot->typesAndWaits(2);
                     $result = $response['choices'][0]['text'];
