@@ -56,10 +56,8 @@ class ChatController extends AbstractController
                     'frequency_penalty' => 0.4,
                     'presence_penalty' => 0
                 ]), true);
-                //print_r($response);
 
                 if(array_key_exists('choices', $response) && array_key_exists(0, $response['choices']) && array_key_exists('text', $response['choices'][0])) {
-                    $bot->typesAndWaits(2);
                     $result = $response['choices'][0]['text'];
                     $bot->reply($result);
                 } else {
@@ -67,7 +65,7 @@ class ChatController extends AbstractController
                 }        
             }
         );
-
+        
         // basic
         // --------------------------------
         $botman->hears(
@@ -100,7 +98,6 @@ class ChatController extends AbstractController
             function (BotMan $bot, string $location) {
                 $response = $this->fetchWeatherData($location);
                 $bot->reply(sprintf('<img src="%s" alt="icon"/>', $response->current->weather_icons[0]));
-                //$bot->reply(sprintf('Le temps à %s est %s!', $response->location->name, $response->current->weather_descriptions[0]));
             }
         );
 

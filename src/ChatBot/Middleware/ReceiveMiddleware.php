@@ -12,9 +12,8 @@ final class ReceiveMiddleware implements Received
 {
     public function received(IncomingMessage $message, $next, BotMan $bot)
     {
-        $userSaid = $message->getText();
-        $message->addExtras('timestamp', (new DateTimeImmutable('now'))->format('d-m-Y H:i:s'));
-        $message->setText(sprintf('%s <- you said that.', $userSaid));
+        $message->setText($message->getText());
+        $bot->typesAndWaits(2); // Attends 2 secondes
 
         return $next($message);
     }
