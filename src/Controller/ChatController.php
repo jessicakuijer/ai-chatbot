@@ -65,7 +65,6 @@ class ChatController extends AbstractController
                 }        
             }
         );
-        
         // basic
         // --------------------------------
         $botman->hears(
