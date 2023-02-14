@@ -52,12 +52,12 @@ class ChatController extends AbstractController
                     'model' =>'text-davinci-003',
                     'prompt' => $prompt,
                     'temperature' => 0.5,
-                    'max_tokens' => 3500,
+                    'max_tokens' => 500,
                     'frequency_penalty' => 0.4,
                     'presence_penalty' => 0
                 ]), true);
                 //print_r($response);
-                
+
                 if(array_key_exists('choices', $response) && array_key_exists(0, $response['choices']) && array_key_exists('text', $response['choices'][0])) {
                     $bot->typesAndWaits(2);
                     $result = $response['choices'][0]['text'];
@@ -73,7 +73,14 @@ class ChatController extends AbstractController
         $botman->hears(
             'hi(.*)',
             function (BotMan $bot) {
-                $bot->reply('Hello, I am a Chatbot in Symfony 5!');
+                $bot->reply('Hello, I am a chatBot!');
+            }
+        );
+
+        $botman->hears(
+            'salut(.*)',
+            function (BotMan $bot) {
+                $bot->reply('Salut, je suis un chatBot!');
             }
         );
         
@@ -85,6 +92,15 @@ class ChatController extends AbstractController
                 $response = $this->fetchWeatherData($location);
                 $bot->reply(sprintf('<img src="%s" alt="icon"/>', $response->current->weather_icons[0]));
                 $bot->reply(sprintf('Weather in %s is %s!', $response->location->name, $response->current->weather_descriptions[0]));
+            }
+        );
+
+        $botman->hears(
+            'prévision météo à {location}',
+            function (BotMan $bot, string $location) {
+                $response = $this->fetchWeatherData($location);
+                $bot->reply(sprintf('<img src="%s" alt="icon"/>', $response->current->weather_icons[0]));
+                //$bot->reply(sprintf('Le temps à %s est %s!', $response->location->name, $response->current->weather_descriptions[0]));
             }
         );
 
@@ -111,9 +127,46 @@ class ChatController extends AbstractController
         );
 
         $botman->hears(
+            'mon nom est {name}(.*)',
+            function (BotMan $bot, string $name) {
+                $bot->userStorage()->save(['name' => $name]);
+                $bot->reply('Salut, ' . $name);
+            }
+        );
+
+        $botman->hears(
+            'je m\'appelle {name}(.*)',
+            function (BotMan $bot, string $name) {
+                $bot->userStorage()->save(['name' => $name]);
+                $bot->reply('Salut, ' . $name);
+            }
+        );
+
+        $botman->hears(
             'say my name(.*)',
             function (BotMan $bot) {
                 $bot->reply('Your name is ' . $bot->userStorage()->get('name'));
+            }
+        );
+
+        $botman->hears(
+            'dis mon nom(.*)',
+            function (BotMan $bot) {
+                $bot->reply('Ton nom est ' . $bot->userStorage()->get('name'));
+            }
+        );
+
+        $botman->hears(
+            'what\'s my name?(.*)',
+            function (BotMan $bot) {
+                $bot->reply('Your name is ' . $bot->userStorage()->get('name'));
+            }
+        );
+
+        $botman->hears(
+            'quel est mon nom?(.*)',
+            function (BotMan $bot) {
+                $bot->reply('Ton nom est ' . $bot->userStorage()->get('name'));
             }
         );
 
@@ -121,11 +174,20 @@ class ChatController extends AbstractController
         // botman will provide the user information by passing user object implemented UserInterface
         // --------------------------------
         $botman->hears(
-            'information(.*)',
+            'name(.*)',
             function (BotMan $bot) {
                 $user = $bot->getUser();
                 // $bot->reply('First name: ' . $user->getFirstName());
                 $bot->reply('Your name is: ' .  $bot->userStorage()->get('name'));
+            }
+        );
+
+        $botman->hears(
+            'nom(.*)',
+            function (BotMan $bot) {
+                $user = $bot->getUser();
+                // $bot->reply('First name: ' . $user->getFirstName());
+                $bot->reply('Ton nom est: ' .  $bot->userStorage()->get('name'));
             }
         );
 
