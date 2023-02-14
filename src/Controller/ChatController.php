@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use stdClass;
-use ReceiveMiddleware;
+use App\ChatBot\Middleware\ReceiveMiddleware;
 use BotMan\BotMan\BotMan;
 use Orhanerday\OpenAi\OpenAi;
 use BotMan\BotMan\BotManFactory;
@@ -42,12 +42,6 @@ class ChatController extends AbstractController
         $botman = BotManFactory::create([], $symfonyCache);
 
         $botman->middleware->received(new ReceiveMiddleware());
-       /*  $botman->hears(
-            '(.*)',
-            function (BotMan $bot) {
-                $bot->reply(sprintf('[%s] %s', $bot->getMessage()->getExtras('timestamp'), $bot->getMessage()->getText()));
-            }
-        ); */
 
         $botman->hears(
             '(.*)',

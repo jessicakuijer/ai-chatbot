@@ -1,7 +1,9 @@
 <?php
 
-declare(strict_types = 1);
+//declare(strict_types = 1);
+namespace App\ChatBot\Middleware;
 
+use DateTimeImmutable;
 use BotMan\BotMan\BotMan;
 use BotMan\BotMan\Interfaces\Middleware\Received;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
