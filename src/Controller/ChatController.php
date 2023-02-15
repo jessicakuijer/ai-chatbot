@@ -43,28 +43,6 @@ class ChatController extends AbstractController
 
         $botman->middleware->received(new ReceiveMiddleware());
 
-        $botman->hears(
-            '(.*)',
-            function (BotMan $bot, string $prompt) {
-                $open_ai_key = $this->parameterBag->get('OPENAI_API_KEY');
-                $openai = new OpenAI($open_ai_key);
-                $response = json_decode($openai->completion([
-                    'model' =>'text-davinci-003',
-                    'prompt' => $prompt,
-                    'temperature' => 0.5,
-                    'max_tokens' => 500,
-                    'frequency_penalty' => 0.4,
-                    'presence_penalty' => 0
-                ]), true);
-
-                if(array_key_exists('choices', $response) && array_key_exists(0, $response['choices']) && array_key_exists('text', $response['choices'][0])) {
-                    $result = $response['choices'][0]['text'];
-                    $bot->reply($result);
-                } else {
-                    $bot->reply("Error occured in openai response");
-                }        
-            }
-        );
         // basic
         // --------------------------------
         $botman->hears(
@@ -220,13 +198,28 @@ class ChatController extends AbstractController
             }
         );
 
-        // fallback, nothing matched
+        // fallback, nothing matched, go to openAI
         // --------------------------------
-        $botman->fallback(
-            function (BotMan $bot) {
-                $bot->reply('Sorry, I did not understand.');
-            }
-        );
+        
+        $botman->fallback(function (BotMan $bot) {
+        $open_ai_key = $this->parameterBag->get('OPENAI_API_KEY');
+        $openai = new OpenAI($open_ai_key);
+        $response = json_decode($openai->completion([
+            'model' =>'text-davinci-003',
+            'prompt' => $bot->getMessage()->getText(),
+            'temperature' => 0.5,
+            'max_tokens' => 500,
+            'frequency_penalty' => 0.4,
+            'presence_penalty' => 0
+        ]), true);
+
+        if(array_key_exists('choices', $response) && array_key_exists(0, $response['choices']) && array_key_exists('text', $response['choices'][0])) {
+            $result = $response['choices'][0]['text'];
+            $bot->reply($result);
+        } else {
+            $bot->reply("Error occured in openai response");
+        }
+    });
 
         $botman->listen();
 
