@@ -75,6 +75,23 @@ class ChatController extends AbstractController
             function (BotMan $bot, string $location) {
                 $response = $this->fetchWeatherData($location);
                 $bot->reply(sprintf('<img src="%s" alt="icon"/>', $response->current->weather_icons[0]));
+                $bot->reply(sprintf('Le temps à %s est %s!', $response->location->name, $response->current->weather_descriptions[0]));
+            }
+        );
+
+        $botman->hears(
+            'météo à {location}',
+            function (BotMan $bot, string $location) {
+                $response = $this->fetchWeatherData($location);
+                $bot->reply(sprintf('<img src="%s" alt="icon"/>', $response->current->weather_icons[0]));
+                $bot->reply(sprintf('Le temps à %s est %s!', $response->location->name, 
+                $response->current->weather_descriptions[0]));
+                $bot->reply(sprintf('La température est de %s degrés!', $response->current->temperature));
+                $bot->reply(sprintf('La température ressentie est de %s degrés!', $response->current->feelslike));
+                $bot->reply(sprintf('L\'humidité est de %s pourcents!', $response->current->humidity));
+                $bot->reply(sprintf('La vitesse du vent est de %s kilomètres par heure!', $response->current->wind_speed));
+                $bot->reply(sprintf('La visibilité est de %s kilomètres!', $response->current->visibility));
+                $bot->reply(sprintf('La pression est de %s hectopascals!', $response->current->pressure));
             }
         );
 
@@ -234,19 +251,39 @@ class ChatController extends AbstractController
         return $this->render('chat/frame.html.twig');
     }
 
-    private function fetchWeatherData(string $location): stdClass
+    /* private function fetchWeatherData(string $location): stdClass
     {
         //😀 dirty, but simple and fine for me in POC
-        $url = 'http://api.weatherstack.com/current?access_key=18895c6bcedd7b4a6194ffd07400025a&query=' . urlencode($location);
+        $url = 'http://api.weatherstack.com/current?access_key=7228e179f2d111dc8d5cde6c2b3eccef&query=' . urlencode($location);
 
         return json_decode(file_get_contents($url));
     }
 
     private function fetchGiphyGif(string $name): Image
     {
-        $url = sprintf('https://api.giphy.com/v1/gifs/search?api_key=zlPPjtJejAAj56KPc5iCjIDqeMsgiD2m&q=%s&limit=1', urlencode($name));
+        $url = sprintf('https://api.giphy.com/v1/gifs/search?api_key=sEQaO6a3pv5bREJkNJaw9FDrcMOGCvAL&q=%s&limit=1', urlencode($name));
+        $response = json_decode(file_get_contents($url));
+
+        return new Image($response->data[0]->images->downsized_large->url);
+    } */
+
+    private function fetchWeatherData(string $location): stdClass
+    {
+        // Récupération de la clé API à partir de la variable d'environnement
+        $weather_api_key= $this->parameterBag->get('WEATHER_API_KEY');
+        $url = 'http://api.weatherstack.com/current?access_key='.$weather_api_key.'&query='.urlencode($location);
+
+        return json_decode(file_get_contents($url));
+    }
+
+    private function fetchGiphyGif(string $name): Image
+    {
+        // Récupération de la clé API à partir de la variable d'environnement
+        $giphy_api_key= $this->parameterBag->get('GIPHY_API_KEY');
+        $url = sprintf('https://api.giphy.com/v1/gifs/search?api_key=%s&q=%s&limit=1', $giphy_api_key, urlencode($name));
         $response = json_decode(file_get_contents($url));
 
         return new Image($response->data[0]->images->downsized_large->url);
     }
+
 }

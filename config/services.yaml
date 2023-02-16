@@ -5,6 +5,8 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     OPENAI_API_KEY: '%env(OPENAI_API_KEY)%'
+    WEATHER_API_KEY: '%env(WEATHER_API_KEY)%'
+    GIPHY_API_KEY: '%env(GIPHY_API_KEY)%'
 
 services:
     # default configuration for services in *this* file
