@@ -86,7 +86,7 @@ class ChatController extends AbstractController
                 $response = $this->fetchWeatherData($location);
                 $bot->reply(sprintf('Le temps à %s est : <img src="%s" alt="icon"/>',$response->location->name, $response->current->weather_icons[0]));
                 $bot->reply(sprintf('La température est de %s degrés ', $response->current->temperature). 'et la température ressentie est de ' . $response->current->feelslike . ' degrés.');
-                $bot->reply(sprintf('L\'humidité est de %s pourcents ', $response->current->humidity). 'et la vitesse du vent est de ' . $response->current->wind_speed . ' kilomètres par heure.');
+                $bot->reply(sprintf('L\'humidité est de %s pourcents ', $response->current->humidity). 'et la vitesse du vent est de ' . $response->current->wind_speed . ' km/h.');
             }
         );
 
