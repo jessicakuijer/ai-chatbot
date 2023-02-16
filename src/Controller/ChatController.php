@@ -74,8 +74,9 @@ class ChatController extends AbstractController
             'prévision météo à {location}',
             function (BotMan $bot, string $location) {
                 $response = $this->fetchWeatherData($location);
-                $bot->reply(sprintf('<img src="%s" alt="icon"/>', $response->current->weather_icons[0]));
-                $bot->reply(sprintf('Le temps à %s est %s!', $response->location->name, $response->current->weather_descriptions[0]));
+                $bot->reply(sprintf('Le temps à %s est : <img src="%s" alt="icon"/>',$response->location->name, $response->current->weather_icons[0]));
+                $bot->reply(sprintf('La température est de %s degrés ', $response->current->temperature). 'et la température ressentie est de ' . $response->current->feelslike . ' degrés.');
+                $bot->reply(sprintf('L\'humidité est de %s pourcents ', $response->current->humidity). 'et la vitesse du vent est de ' . $response->current->wind_speed . ' km/h.');
             }
         );
 
@@ -83,11 +84,9 @@ class ChatController extends AbstractController
             'météo à {location}',
             function (BotMan $bot, string $location) {
                 $response = $this->fetchWeatherData($location);
-                $bot->reply(sprintf('<img src="%s" alt="icon"/>', $response->current->weather_icons[0]));
-                $bot->reply(sprintf('Le temps à %s est %s!', $response->location->name, 
-                $response->current->weather_descriptions[0]));
-                $bot->reply(sprintf('La température est de %s degrés!', $response->current->temperature). 'et la température ressentie est de ' . $response->current->feelslike . ' degrés');
-                $bot->reply(sprintf('L\'humidité est de %s pourcents!', $response->current->humidity). 'et la vitesse du vent est de ' . $response->current->wind_speed . ' kilomètres par heure');
+                $bot->reply(sprintf('Le temps à %s est : <img src="%s" alt="icon"/>',$response->location->name, $response->current->weather_icons[0]));
+                $bot->reply(sprintf('La température est de %s degrés ', $response->current->temperature). 'et la température ressentie est de ' . $response->current->feelslike . ' degrés.');
+                $bot->reply(sprintf('L\'humidité est de %s pourcents ', $response->current->humidity). 'et la vitesse du vent est de ' . $response->current->wind_speed . ' kilomètres par heure.');
             }
         );
 
