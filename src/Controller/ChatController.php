@@ -99,10 +99,10 @@ class ChatController extends AbstractController
         // attachment
         // --------------------------------
         $botman->hears(
-            '/gif {name}',
+            '(.*)gif {name}',
             function (BotMan $bot, string $name) {
                 $bot->reply(
-                    OutgoingMessage::create('this is your gif')
+                    OutgoingMessage::create('GIF: ')
                         ->withAttachment($this->fetchGiphyGif($name))
                 );
             }
