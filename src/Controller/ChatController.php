@@ -220,7 +220,7 @@ class ChatController extends AbstractController
         // --------------------------------
 
         $botman->hears(
-            'Youtube {search}',
+            '(.*)youtube {search}',
             function (BotMan $bot, $search) {
                 $developerKey = $this->parameterBag->get('YOUTUBE_API_KEY');
                 $googleClient = new Google_Client();
@@ -307,7 +307,6 @@ class ChatController extends AbstractController
     private function fetchYoutubeVideo(string $videoId): ?string
     {
         $developerKey = $this->parameterBag->get('YOUTUBE_API_KEY');
-
         $url = sprintf('https://www.googleapis.com/youtube/v3/videos?id=%s&key=%s&part=snippet,contentDetails,player', $videoId, $developerKey);
         $response = json_decode(file_get_contents($url));
 
@@ -320,8 +319,5 @@ class ChatController extends AbstractController
 
         return $iframe;
     }
-
-
-
 
 }
