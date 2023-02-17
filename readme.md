@@ -17,6 +17,9 @@
 ![screenshot1](/public/images/screenshot1.png?raw=true "chatbot 1")
 ![screenshot1](/public/images/screenshot2.png?raw=true "chatbot 2")
 
+## DEMO live
+
+[Demo deployed on Heroku](https://ai-chatbot.herokuapp.com)
 ## Install
 ```bash
 composer install 
