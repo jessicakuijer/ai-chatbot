@@ -11,6 +11,7 @@
         "botman/botman": "^2.6",
         "botman/driver-web": "^1.5",
         "doctrine/annotations": "^1.13",
+        "google/apiclient": "^2.13",
         "openai-php/client": "^0.3.0",
         "orhanerday/open-ai": "^3.4",
         "symfony/apache-pack": "^1.0",
@@ -69,7 +70,7 @@
     },
     "extra": {
         "symfony": {
-            "allow-contrib": false,
+            "allow-contrib": true,
             "require": "5.2.*"
         }
     },

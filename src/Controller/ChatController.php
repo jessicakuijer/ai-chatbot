@@ -3,19 +3,23 @@
 namespace App\Controller;
 
 use stdClass;
-use App\ChatBot\Middleware\ReceiveMiddleware;
+use Google\Client as Google_Client;
+use Google\Service\YouTube as Google_Service_YouTube;
 use BotMan\BotMan\BotMan;
 use Orhanerday\OpenAi\OpenAi;
 use BotMan\BotMan\BotManFactory;
 use BotMan\Drivers\Web\WebDriver;
 use BotMan\BotMan\Cache\SymfonyCache;
 use BotMan\BotMan\Drivers\DriverManager;
+use App\ChatBot\Middleware\ReceiveMiddleware;
 use BotMan\BotMan\Messages\Attachments\Image;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\ChatBot\Conversation\QuestionConversation;
 use App\ChatBot\Conversation\OnBoardingConversation;
+use BotMan\BotMan\Messages\Attachments\Video;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
+use Google\Service\CloudRun\Service;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
@@ -212,6 +216,38 @@ class ChatController extends AbstractController
             }
         );
 
+        // Youtube
+        // --------------------------------
+
+        $botman->hears(
+            'Youtube {search}',
+            function (BotMan $bot, $search) {
+                $developerKey = $this->parameterBag->get('YOUTUBE_API_KEY');
+                $googleClient = new Google_Client();
+                $googleClient->setDeveloperKey($developerKey);
+        
+                $youtubeService = new Google_Service_YouTube($googleClient);
+        
+                $searchResponse = $youtubeService->search->listSearch('id,snippet', [
+                    'q' => $search,
+                    'type' => 'video',
+                    'maxResults' => 1
+                ]);
+        
+                if (count($searchResponse->items) === 0) {
+                    $bot->reply('Aucune vidéo trouvée.');
+                } else {
+                    $videoId = $searchResponse->items[0]->id->videoId;
+                    $videoUrl = $this->fetchYoutubeVideo($videoId);
+        
+                    if ($videoUrl) {
+                        $bot->reply($videoUrl);
+                    }
+                }
+            }
+        );
+        
+
         // fallback, nothing matched, go to openAI
         // --------------------------------
         
@@ -266,5 +302,26 @@ class ChatController extends AbstractController
 
         return new Image($response->data[0]->images->downsized_large->url);
     }
+
+
+    private function fetchYoutubeVideo(string $videoId): ?string
+    {
+        $developerKey = $this->parameterBag->get('YOUTUBE_API_KEY');
+
+        $url = sprintf('https://www.googleapis.com/youtube/v3/videos?id=%s&key=%s&part=snippet,contentDetails,player', $videoId, $developerKey);
+        $response = json_decode(file_get_contents($url));
+
+        if (empty($response->items)) {
+            return null;
+        }
+
+        $videoUrl = 'https://www.youtube.com/embed/' . $response->items[0]->id;
+        $iframe = sprintf('<iframe width="260" height="215" src="%s" frameborder="0" allowfullscreen></iframe>', $videoUrl);
+
+        return $iframe;
+    }
+
+
+
 
 }
