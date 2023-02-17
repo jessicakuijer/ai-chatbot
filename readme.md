@@ -1,5 +1,4 @@
 <div align="center">
-  <img src="docs/chatbot.png" width="300px" alt="aino" />
   <h3>A symfony 5 Chatbot Demo using ChatGPT-3, Youtube, Giphy, WeatherStack apis...🇫🇷 🇺🇸</h3>
   <p>This is a symfony 5 Chatbot Demo by using [Botman](https://botman.io). It can be used as Chatbot symfony 5 starter.</p>
 
@@ -14,8 +13,10 @@
 </div>
 
 ---
+<div align="center">
 ![screenshot1](/public/images/screenshot1.png?raw=true "chatbot 1")
-![screenshot1](/public/images/screenshot1.png?raw=true "chatbot 2")
+![screenshot1](/public/images/screenshot2.png?raw=true "chatbot 2")
+</div>
 
 ## Install
 ```bash
