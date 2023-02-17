@@ -35,6 +35,8 @@ symfony serve
 <https://developers.giphy.com/dashboard/>
 
 
-## licence
+## licences
 
-[MIT](./LICENSE) License © 2021 [@vikbert](https://vikbert.github.io/)
+[MIT](./LICENSE) License © 2023  
+[@vikbert for CSS](https://vikbert.github.io/pixss)  
+[@jessica kuijer](https://jessicakuijer.com)
