@@ -32,8 +32,8 @@ symfony serve -d
 - "weather in london" or "prévision météo à paris" or "météo à new york"  
 - "give me a gif cats" or "envoi un gif mr bean"  
 - "my name is john" or "mon nom est alice" or "je m'appelle jessica"  
-- "say my name" or "what's my name?" or "dis mon nom" or "quel est mon nom?"  
-- "name" or "nom"  
+- "say my name" or "dis mon nom"  
+- "what's my name?" or "name" or "nom" or "quel est mon nom?"  
 - "survey" or "help" or "stop" or "question"  
 - "give me a youtube movie back to the future" or "donne moi une vidéo youtube chats"  
 - THEN... ask for everything you want, AI chatGPT will give you answers.  🤖
