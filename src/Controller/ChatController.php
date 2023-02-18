@@ -255,7 +255,7 @@ class ChatController extends AbstractController
                 $api_key = $this->parameterBag->get('GNEWS_API_KEY');
 
                 // Set the API endpoint and parameters
-                $url = 'https://gnews.io/api/v4/search?q=%s&lang=fr&token=' . $api_key;
+                $url = 'https://gnews.io/api/v4/search?q=%s&lang=fr&token=' .$api_key;
                 $params = [
                     'lang' => 'fr',
                     'token' => $api_key,
