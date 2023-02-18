@@ -247,6 +247,59 @@ class ChatController extends AbstractController
             }
         );
         
+        // Remote API: GNews
+        // --------------------------------
+        $botman->hears(
+            '(.*)actualités {search}',
+            function (BotMan $bot, $search) {
+                $api_key = $this->parameterBag->get('GNEWS_API_KEY');
+
+                // Set the API endpoint and parameters
+                $url = 'https://gnews.io/api/v4/search?q=%s&lang=fr&token=' . $api_key;
+                $params = [
+                    'lang' => 'fr',
+                    'token' => $api_key,
+                    'q' => $search,
+                ];
+
+                // Make the API request
+                $response = json_decode(file_get_contents($url . '?' . http_build_query($params)));
+
+                // Extracting the articles from the response
+                $articles = $response->articles;
+
+                // Do something with the articles (e.g. reply with a message)
+                foreach ($articles as $article) {
+                    $bot->reply('Actualité : '.'<a href="' . $article->url . '">' . $article->title . '</a>');
+                }
+            }
+        );
+
+        $botman->hears(
+            '(.*)news {search}',
+            function (BotMan $bot, $search) {
+                $api_key = $this->parameterBag->get('GNEWS_API_KEY');
+
+                // Set the API endpoint and parameters
+                $url = 'https://gnews.io/api/v4/search?q=%s&lang=en&token=' . $api_key;
+                $params = [
+                    'lang' => 'fr',
+                    'token' => $api_key,
+                    'q' => $search,
+                ];
+
+                // Make the API request
+                $response = json_decode(file_get_contents($url . '?' . http_build_query($params)));
+
+                // Extract the articles from the response
+                $articles = $response->articles;
+
+                // Do something with the articles (e.g. reply with a message)
+                foreach ($articles as $article) {
+                    $bot->reply('NEWS : '.'<a href="' . $article->url . '">' . $article->title . '</a>');
+                }
+            }
+        );
 
         // fallback, nothing matched, go to openAI
         // --------------------------------

@@ -40,6 +40,7 @@ symfony serve -d
 - "what's my name?" or "name" or "nom" or "quel est mon nom?"  
 - "survey" or "help" or "stop" or "question"  
 - "give me a youtube movie back to the future" or "donne moi une vidéo youtube chats"  
+- "news trump" or "actualités pierre palmade"
 - THEN... ask for everything you want, AI chatGPT will give you answers.  🤖
 
 ## API used in POC (you have to get your own api keys as environnement variables)
@@ -48,6 +49,7 @@ symfony serve -d
 [API Giphy](https://support.giphy.com/hc/en-us/articles/360020283431-Request-A-GIPHY-API-Key)  
 [API OpenAI for ChatGPT-3](https://platform.openai.com)  
 [API WeatherStack](https://weatherstack.com/)  
+[API GNews](https://gnews.io/)  
 
 Configure your environnement variables that you can find in services.yaml parameters and .env.local   
 ## licenses
