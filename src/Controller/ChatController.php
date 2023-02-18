@@ -270,8 +270,9 @@ class ChatController extends AbstractController
 
                 // Do something with the articles (e.g. reply with a message)
                 foreach ($articles as $article) {
-                    $bot->reply('Actualité : '.'<a href="' . $article->url . '">' . $article->title . '</a>');
-                }
+                    $date = date('d-m-Y', strtotime($article->publishedAt));
+                    $bot->reply('Actualité : '.'<br>'.'<img style="width:200px;height:150px;" src="'. $article->image . '"/>'.'<br>'.'<a href="' . $article->url . '">' . $article->title . '</a>'.'<br>'.'Date de publication : ' . $date . ' | Source : ' . $article->source->name);
+                }                    
             }
         );
 
@@ -296,7 +297,8 @@ class ChatController extends AbstractController
 
                 // Do something with the articles (e.g. reply with a message)
                 foreach ($articles as $article) {
-                    $bot->reply('NEWS : '.'<a href="' . $article->url . '">' . $article->title . '</a>');
+                    $date = date('m-d-Y', strtotime($article->publishedAt));
+                    $bot->reply('Actualité : '.'<br>'.'<img style="width:200px;height:150px;" src="'. $article->image . '"/>'.'<br>'.'<a href="' . $article->url . '">' . $article->title . '</a>'.'<br>'.'Published at : ' . $date . ' | Origin : ' . $article->source->name);
                 }
             }
         );
