@@ -210,7 +210,8 @@ class ChatController extends AbstractController
         $botman->hears(
             'question(.*)',
             function (BotMan $bot) {
-                $bot->startConversation(new QuestionConversation());
+                $conversation = new QuestionConversation();
+                $bot->startConversation($conversation);
             }
         );
 

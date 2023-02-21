@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+/* declare(strict_types = 1); */
 
 namespace App\ChatBot\Conversation;
 
@@ -25,15 +25,16 @@ final class QuestionConversation extends Conversation
                     Button::create('dog')->value('dog'),
                 ]
             );
-        $this->ask(
-            $question,
-            function (Answer $answer) {
-                if ($answer->isInteractiveMessageReply()) {
-                    $this->say('you selected: ' . $answer->getValue());
-                } else {
-                    $this->repeat();
+            $this->ask(
+                $question,
+                function (Answer $answer) {
+                    if ($answer->isInteractiveMessageReply()) {
+                        $value = $answer->getValue();
+                        $this->say('you selected: ' . $value);
+                    } else {
+                        $this->repeat();
+                    }
                 }
-            }
-        );
+            );            
     }
 }
