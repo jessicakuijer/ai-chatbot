@@ -27,17 +27,13 @@ class ChatController extends AbstractController
         $this->parameterBag = $parameterBag;
     }
     
-    /**
-     * @Route("/", name="chat_index")
-     */
+    #[Route('/', name: 'chat_index')]
     public function index(): Response
     {
         return $this->render('chat/index.html.twig');
     }
 
-    /**
-     * @Route("/chat/message", name="chat_message")
-     */
+    #[Route('/chat/message', name: 'chat_message')]
     public function message(SymfonyCache $symfonyCache): Response
     {
         DriverManager::loadDriver(WebDriver::class);

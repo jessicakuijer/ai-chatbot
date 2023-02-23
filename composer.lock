@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7d6f18b637d35448a87e1b6c0a566b77",
+    "content-hash": "ec50e0e2309d79ef1ce4a76332238fee",
     "packages": [
         {
             "name": "botman/botman",
@@ -11652,7 +11652,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=8.2",
+        "php": ">=8.1",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-json": "*"
