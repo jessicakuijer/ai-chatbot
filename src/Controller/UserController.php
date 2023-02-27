@@ -23,6 +23,7 @@ class UserController extends AbstractController
         /** @var AdminUser $user */
         $user = $this->getUser();
         $form = $this->createForm(ProfileType::class, $user);
+        
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->persist($user);
