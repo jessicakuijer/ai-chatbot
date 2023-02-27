@@ -1,9 +1,10 @@
 {% extends 'security/layout.html.twig' %}
 
 {% block content %}
-    <div class="row vh-100">
-        <div class="col-sm-10 col-md-8 col-lg-6 mx-auto d-table h-100">
-            <div class="d-table-cell align-middle">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <div class="container my-auto">
+        <div class="row">
+            <div class="col-sm-12 col-md-10 col-lg-8 mx-auto">
 
                 <div class="text-center mt-4">
                     <h1 class="h2">Bienvenue !</h1>
@@ -14,20 +15,18 @@
 
                 <div class="card">
                     <div class="card-body">
-                        <div class="m-sm-4">
-                        
+                        <div class="m-sm-4 text-center">
+
                             {% if error %}
                                 <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
                             {% endif %}
-                            <div class="text-center">
-                                {# <img src="{{ asset('build/images/skull.png') }}" alt="Charles Hall" class="img-fluid w-25"> #}
-                            </div>
+                            {# <img src="{{ asset('build/images/skull.png') }}" alt="Charles Hall" class="img-fluid w-25"> #}
                             <form action="{{ path('app_admin_security_login') }}" method="POST">
-                                <div class="mb-3">
+                                <div class="form-group mb-3">
                                     <label for="username" class="form-label">Adresse email</label>
                                     <input class="form-control" type="email" id="username" name="_username" value="{{ last_username }}" placeholder="foo@bar.com" required>
                                 </div>
-                                <div class="mb-3">
+                                <div class="form-group mb-3">
                                     <label for="password" class="form-label">Mot de passe</label>
                                     <input class="form-control" type="password" id="password" name="_password" placeholder="********" required>
                                 </div>
@@ -35,9 +34,7 @@
                                 {#  <p>
                                     <a href="{{ path('app_admin_security_resetpasswordrequest') }}">Mot de passe oublié ?</a>
                                 </p> #}
-                                <div class="text-center mt-3">
-                                    <button class="btn btn-lg btn-primary">Se connecter</button>
-                                </div>
+                                <button class="btn btn-lg btn-primary btn-block" type="submit">Se connecter</button>
                             </form>
                         </div>
                     </div>
