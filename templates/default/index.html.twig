@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="d-flex flex-column align-items-center justify-content-center vh-100">
+        <h1 class="h1 text-center">
+            Welcome to AI-Chatbot Symfony project ! <br />
+            Click on button to enter !
+        </h1>
+        <button class="btn btn-primary mt-3">
+            <a href="/login" class="text-white">
+                Enter
+            </a>
+        {# <a class="text-center" href="{{ path('app_admin_default_index') }}">
+            <img src="{{ asset('') }}" class="w-15 mt-3" alt="Skull avatar">
+        </a> #}
+    </div>
+{% endblock %}

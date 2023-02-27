@@ -1,0 +1,48 @@
+{% extends 'security/layout.html.twig' %}
+
+{% block content %}
+    <div class="row vh-100">
+        <div class="col-sm-10 col-md-8 col-lg-6 mx-auto d-table h-100">
+            <div class="d-table-cell align-middle">
+
+                <div class="text-center mt-4">
+                    <h1 class="h2">Bienvenue !</h1>
+                    <p class="lead">
+                        Connectez-vous à votre compte pour continuer
+                    </p>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <div class="m-sm-4">
+                            {% if error %}
+                                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                            {% endif %}
+                            <div class="text-center">
+                                {# <img src="{{ asset('build/images/skull.png') }}" alt="Charles Hall" class="img-fluid w-25"> #}
+                            </div>
+                            <form action="{{ path('app_admin_security_login') }}" method="POST">
+                                <div class="mb-3">
+                                    <label for="username" class="form-label">Adresse email</label>
+                                    <input class="form-control" type="email" id="username" name="_username" value="{{ last_username }}" placeholder="foo@bar.com" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">Mot de passe</label>
+                                    <input class="form-control" type="password" id="password" name="_password" placeholder="********" required>
+                                </div>
+                                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                                {#  <p>
+                                    <a href="{{ path('app_admin_security_resetpasswordrequest') }}">Mot de passe oublié ?</a>
+                                </p> #}
+                                <div class="text-center mt-3">
+                                    <button class="btn btn-lg btn-primary">Se connecter</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -3,3 +3,9 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
+admin:
+    path: /chat
+    controller: App\Controller\SecurityController::index
+    methods: GET
+    requirements:
+        _role: ROLE_ADMIN

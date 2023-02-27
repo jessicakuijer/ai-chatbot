@@ -27,7 +27,7 @@ class ChatController extends AbstractController
         $this->parameterBag = $parameterBag;
     }
     
-    #[Route('/', name: 'chat_index')]
+    #[Route('/chat', name: 'chat_index')]
     public function index(): Response
     {
         return $this->render('chat/index.html.twig');
