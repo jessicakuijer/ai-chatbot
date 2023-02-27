@@ -20,6 +20,7 @@
 ## DEMO live
 
 [Demo deployed on Heroku](https://ai-chatbot.herokuapp.com)  
+
 This demo is password protected. Send me a request so I can create your credentials.  
 [@jessica kuijer](https://jessicakuijer.com)
 ## Install
