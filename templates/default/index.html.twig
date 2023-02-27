@@ -1,17 +1,16 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+<div class="container vh-100 background-gif" style="background-image:url(./images/gif-ai-chatbot.gif);background-size: contain;background-repeat: no-repeat;background-position: center;" >
     <div class="d-flex flex-column align-items-center justify-content-center vh-100">
-        <h1 class="h1 text-center">
+        <h1 class="text-center bg-info border border-primary">
             Welcome to AI-Chatbot Symfony project ! <br />
             Click on button to enter !
         </h1>
-        <button class="btn btn-primary mt-3">
+        <button class="btn btn-primary btn-lg">
             <a href="/login" class="text-white">
                 Enter
             </a>
-        {# <a class="text-center" href="{{ path('app_admin_default_index') }}">
-            <img src="{{ asset('') }}" class="w-15 mt-3" alt="Skull avatar">
-        </a> #}
     </div>
+</div>
 {% endblock %}
