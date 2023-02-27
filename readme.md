@@ -19,7 +19,9 @@
 
 ## DEMO live
 
-[Demo deployed on Heroku](https://ai-chatbot.herokuapp.com)
+[Demo deployed on Heroku](https://ai-chatbot.herokuapp.com)  
+This demo is password protected. Send me a request so I can create your credentials.  
+[@jessica kuijer](https://jessicakuijer.com)
 ## Install
 ```bash
 composer install 
@@ -29,7 +31,15 @@ composer install
 symfony serve -d
 # open https://127.0.0.1:8000
 ```
+On local (dev) environment, use mysql for your own use and then you can create admins with the command:
+```bash
+bin/console app:create:admin
+```  
+An invite in your terminal will ask for your credentials and password is hashed.
 
+## Routes
+You can access the main website and /login page only. (& /logout)  
+Admins can access /chat page for using AI-chatbot.
 ## ChatBot Commands to test
 
 - "hi" or "salut"  
