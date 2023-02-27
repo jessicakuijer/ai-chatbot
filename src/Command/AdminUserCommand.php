@@ -51,4 +51,5 @@ class CreateAdminUserCommand extends Command
 
         return self::SUCCESS;
     }
+    
 }
