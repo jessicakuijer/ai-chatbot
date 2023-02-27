@@ -91,6 +91,10 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
+        ],
+        "make-admin-user": [
+            "chmod +x bin/console",
+            "php bin/console app:create:admin"
         ]
     },
     "conflict": {
