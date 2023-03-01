@@ -307,10 +307,10 @@ class ChatController extends AbstractController
         $response = json_decode($openai->completion([
             'model' =>'text-davinci-003',
             'prompt' => $bot->getMessage()->getText(),
-            'temperature' => 0.5,
-            'max_tokens' => 500,
-            'frequency_penalty' => 0.4,
-            'presence_penalty' => 0
+            'temperature' => 0.7,
+            'max_tokens' => 150,
+            'frequency_penalty' => 0.3,
+            'presence_penalty' => 0.5
         ]), true);
 
         if(array_key_exists('choices', $response) && array_key_exists(0, $response['choices']) && array_key_exists('text', $response['choices'][0])) {
