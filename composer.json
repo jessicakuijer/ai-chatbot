@@ -8,6 +8,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-json": "*",
+        "ext-intl": "*",
         "botman/botman": "^2.6",
         "botman/driver-web": "^1.5",
         "doctrine/annotations": "^1.0",
