@@ -363,7 +363,6 @@ class ChatController extends AbstractController
         if (empty($response->items)) {
             return null;
         }
-
         $videoUrl = 'https://www.youtube.com/embed/' . $response->items[0]->id;
         $iframe = sprintf('<iframe width="260" height="215" src="%s" frameborder="0" allowfullscreen></iframe>', $videoUrl);
 
