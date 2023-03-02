@@ -9,6 +9,12 @@ parameters:
     GIPHY_API_KEY: '%env(GIPHY_API_KEY)%'
     YOUTUBE_API_KEY: '%env(YOUTUBE_API_KEY)%'
     GNEWS_API_KEY: '%env(GNEWS_API_KEY)%'
+     # Locale par défaut
+    locale: 'fr'
+
+    # Répertoire contenant les fichiers de traduction
+    # Ici on utilise %kernel.project_dir% pour spécifier le chemin absolu vers le dossier "translations" de votre projet.
+    translator.default_path: '%kernel.project_dir%/translations'
 
 services:
     # default configuration for services in *this* file

@@ -1,0 +1,13 @@
+intro:
+  welcome: Welcome to AI-Chatbot Symfony project !
+  buttons: Click on button to enter !
+button:
+  request_access: Request Access
+  login: Login
+login:
+  welcome: Welcome !
+  intro: Login to your account
+  email: Email address
+  password: Password
+navigation:
+  logout: Log Out

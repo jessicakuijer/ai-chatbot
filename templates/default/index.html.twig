@@ -7,18 +7,20 @@
             <div class="row align-items-center justify-content-center">
                 <div class="col-12 col-md-8 col-lg-6 text-center">
                     <h1 class="text-center bg-info border border-primary py-3">
-                        Welcome to AI-Chatbot Symfony project ! <br />
-                        Click on button to enter !
+                       {#  Welcome to AI-Chatbot Symfony project ! #}{{ 'intro.welcome'|trans }}<br />
+                        {# Click on button to enter ! #}{{ 'intro.buttons'|trans }}
                     </h1>
                     <button class="btn btn-primary btn-lg btn-block">
                         <a href="/login" class="text-white">
-                            Enter
+                            {# Enter #}
+                            {{ 'button.login'|trans }}
                         </a>
                     </button>
                     </button>
                     <button class="btn btn-success btn-lg btn-block">
                         <a href="https://www.linkedin.com/in/jessicakuijer" class="text-white" target="_blank">
-                        Demande d'accès
+                        {# Demande d'accès #}
+                        {{ 'button.request_access'|trans }}
                         </a>
                     </button>
                 </div>
