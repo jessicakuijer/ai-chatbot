@@ -304,6 +304,7 @@ class ChatController extends AbstractController
         $botman->fallback(function (BotMan $bot) {
         $open_ai_key = $this->parameterBag->get('OPENAI_API_KEY');
         $openai = new OpenAI($open_ai_key);
+        
         $response = json_decode($openai->completion([
             'model' =>'text-davinci-003',
             'prompt' => $bot->getMessage()->getText(),
