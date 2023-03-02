@@ -38,7 +38,6 @@ class ChatController extends AbstractController
     {
         DriverManager::loadDriver(WebDriver::class);
         $botman = BotManFactory::create([], $symfonyCache);
-
         $botman->middleware->received(new ReceiveMiddleware());
 
         // basic
