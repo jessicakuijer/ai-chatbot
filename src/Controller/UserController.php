@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/* TODO: Add a profile page for the user with admin role*/
 #[Route('/user')]
 class UserController extends AbstractController
 {

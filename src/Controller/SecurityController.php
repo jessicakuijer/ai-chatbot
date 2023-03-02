@@ -18,7 +18,6 @@ class SecurityController extends AbstractController
 {
     public const LOGIN_ROUTE = 'app_admin_security_login';
     public const LOGOUT_ROUTE = 'app_admin_security_logout';
-    public const REDIRECT_AFTER_LOGIN_ROUTE = 'chat_index';
 
     public function __construct(
         private readonly AdminUserManager $adminUserManager,
@@ -59,6 +58,8 @@ class SecurityController extends AbstractController
         throw new LogicException();
     }
 
+    /* TODO: Add a password reset functionality */
+    
     /* #[Route('/reset-password-request')]
     public function resetPasswordRequest(Request $request): Response
     {
