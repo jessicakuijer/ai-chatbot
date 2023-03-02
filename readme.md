@@ -50,6 +50,7 @@ Admins can access /chat page for using AI-chatbot.
 - "what's my name?" or "name" or "nom" or "quel est mon nom?"   
 - "give me a youtube movie back to the future" or "donne moi une vidéo youtube chats"  
 - "news trump" or "actualités pierre palmade"
+- "prévision météo à paris" or "weather in new york"
 - THEN... ask for everything you want, AI chatGPT will give you answers.  🤖
 
 ## API used in POC (you have to get your own api keys as environnement variables)
