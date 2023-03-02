@@ -326,9 +326,7 @@ class ChatController extends AbstractController
         return new Response();
     }
 
-    /**
-     * @Route("/chat/frame", name="chat_frame")
-     */
+    #[Route('/chat/frame', name: 'chat_frame')]
     public function chatframe(): Response
     {
         return $this->render('chat/frame.html.twig');
