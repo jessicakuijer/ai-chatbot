@@ -97,78 +97,63 @@ class ChatController extends AbstractController
 
         // data provider: user info
         // --------------------------------
-        $botman->hears(
-            'my name is {name}(.*)',
-            function (BotMan $bot, string $name) {
-                $bot->userStorage()->save(['name' => $name]);
-                $bot->reply('Hello, ' . $name);
-            }
-        );
+        // Define a function to handle name requests
+        function handleNameRequest($botman, $namePrefix, $name) {
+            $botman->userStorage()->save(['name' => $name]);
+            $botman->reply($namePrefix . $name);
+        }
 
-        $botman->hears(
-            'mon nom est {name}(.*)',
-            function (BotMan $bot, string $name) {
-                $bot->userStorage()->save(['name' => $name]);
-                $bot->reply('Salut, ' . $name);
-            }
-        );
+        // Define a function to handle name retrieval requests
+        function handleNameRetrievalRequest($botman, $namePrefix) {
+            $botman->reply('Your name is ' . $botman->userStorage()->get('name'));
+        }
 
-        $botman->hears(
-            'je m\'appelle {name}(.*)',
-            function (BotMan $bot, string $name) {
-                $bot->userStorage()->save(['name' => $name]);
-                $bot->reply('Salut, ' . $name);
-            }
-        );
+        // Define a function to handle name retrieval requests in French
+        function handleNameRetrievalRequestFR($botman, $namePrefix) {
+            $botman->reply('Ton nom est ' . $botman->userStorage()->get('name'));
+        }
 
-        $botman->hears(
-            'say my name(.*)',
-            function (BotMan $bot) {
-                $bot->reply('Your name is ' . $bot->userStorage()->get('name'));
-            }
-        );
-
-        $botman->hears(
-            'dis mon nom(.*)',
-            function (BotMan $bot) {
-                $bot->reply('Ton nom est ' . $bot->userStorage()->get('name'));
-            }
-        );
-
-        $botman->hears(
-            'what\'s my name?(.*)',
-            function (BotMan $bot) {
-                $bot->reply('Your name is ' . $bot->userStorage()->get('name'));
-            }
-        );
-
-        $botman->hears(
-            'quel est mon nom?(.*)',
-            function (BotMan $bot) {
-                $bot->reply('Ton nom est ' . $bot->userStorage()->get('name'));
-            }
-        );
-
-        // User information:
-        // botman will provide the user information by passing user object implemented UserInterface
+        // User info API
         // --------------------------------
-        $botman->hears(
-            'name(.*)',
-            function (BotMan $bot) {
-                $user = $bot->getUser();
-                // $bot->reply('First name: ' . $user->getFirstName());
-                $bot->reply('Your name is: ' .  $bot->userStorage()->get('name'));
-            }
-        );
 
-        $botman->hears(
-            'nom(.*)',
-            function (BotMan $bot) {
-                $user = $bot->getUser();
-                // $bot->reply('First name: ' . $user->getFirstName());
-                $bot->reply('Ton nom est: ' .  $bot->userStorage()->get('name'));
-            }
-        );
+        // Handle name requests in English
+        $botman->hears('my name is {name}(.*)', function ($botman, $name) {
+            handleNameRequest($botman, 'Hello, ', $name);
+        });
+
+        $botman->hears('je m\'appelle {name}(.*)', function ($botman, $name) {
+            handleNameRequest($botman, 'Salut, ', $name);
+        });
+
+        $botman->hears('say my name(.*)', function ($botman) {
+            handleNameRetrievalRequest($botman, '');
+        });
+
+        $botman->hears('what\'s my name?(.*)', function ($botman) {
+            handleNameRetrievalRequest($botman, '');
+        });
+
+        $botman->hears('name(.*)', function ($botman) {
+            handleNameRetrievalRequest($botman, '');
+        });
+
+        // Handle name requests in French
+        $botman->hears('mon nom est {name}(.*)', function ($botman, $name) {
+            handleNameRequest($botman, 'Salut, ', $name);
+        });
+
+        $botman->hears('dis mon nom(.*)', function ($botman) {
+            handleNameRetrievalRequestFR($botman, '');
+        });
+
+        $botman->hears('quel est mon nom?(.*)', function ($botman) {
+            handleNameRetrievalRequestFR($botman, '');
+        });
+
+        $botman->hears('nom(.*)', function ($botman) {
+            handleNameRetrievalRequestFR($botman, '');
+        });
+
 
         // conversation
         // --------------------------------
