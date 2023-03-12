@@ -56,38 +56,32 @@ class ChatController extends AbstractController
             }
         );
         
-        // remote API
+        // remote APIs
         // --------------------------------
-        $botman->hears(
-            'weather in {location}',
-            function (BotMan $bot, string $location) {
-                $response = $this->fetchWeatherData($location);
-                $bot->reply(sprintf('<img src="%s" alt="icon"/>', $response->current->weather_icons[0]));
-                $bot->reply(sprintf('Weather in %s is %s!', $response->location->name, $response->current->weather_descriptions[0]));
-                $bot->reply(sprintf('Temperature is %s degrees ', $response->current->temperature). 'and felt temperature is ' . $response->current->feelslike . ' degrees.');
-                $bot->reply(sprintf('Humidity is %s percents ', $response->current->humidity). 'and wind speed is ' . $response->current->wind_speed . ' km/h.');
-            }
-        );
 
-        $botman->hears(
-            'prévision météo à {location}',
-            function (BotMan $bot, string $location) {
-                $response = $this->fetchWeatherData($location);
-                $bot->reply(sprintf('Le temps à %s est : <img src="%s" alt="icon"/>',$response->location->name, $response->current->weather_icons[0]));
-                $bot->reply(sprintf('La température est de %s degrés ', $response->current->temperature). 'et la température ressentie est de ' . $response->current->feelslike . ' degrés.');
-                $bot->reply(sprintf('L\'humidité est de %s pourcents ', $response->current->humidity). 'et la vitesse du vent est de ' . $response->current->wind_speed . ' km/h.');
-            }
-        );
+        // Define a function to handle weather requests
+        function handleWeatherRequest($botman, $location, $messagePrefix = '', $context) {
+            $response = $context->fetchWeatherData($location);
+            $botman->reply(sprintf('%sLe temps à %s est : <img src="%s" alt="icon"/>', $messagePrefix, $response->location->name, $response->current->weather_icons[0]));
+            $botman->reply(sprintf('La température est de %s degrés et la température ressentie est de %s degrés.', $response->current->temperature, $response->current->feelslike));
+            $botman->reply(sprintf('L\'humidité est de %s pourcents et la vitesse du vent est de %s km/h.', $response->current->humidity, $response->current->wind_speed));
+        }
 
-        $botman->hears(
-            'météo à {location}',
-            function (BotMan $bot, string $location) {
-                $response = $this->fetchWeatherData($location);
-                $bot->reply(sprintf('Le temps à %s est : <img src="%s" alt="icon"/>',$response->location->name, $response->current->weather_icons[0]));
-                $bot->reply(sprintf('La température est de %s degrés ', $response->current->temperature). 'et la température ressentie est de ' . $response->current->feelslike . ' degrés.');
-                $bot->reply(sprintf('L\'humidité est de %s pourcents ', $response->current->humidity). 'et la vitesse du vent est de ' . $response->current->wind_speed . ' km/h.');
-            }
-        );
+        $context = $this; // Assign the current context to a variable
+
+        // Handle weather requests in French
+        $botman->hears('prévision météo à {location}', function ($botman, $location) use ($context) {
+            handleWeatherRequest($botman, $location, 'Prévision météo : ', $context);
+        });
+
+        $botman->hears('météo à {location}', function ($botman, $location) use ($context) {
+            handleWeatherRequest($botman, $location, 'Météo : ', $context);
+        });
+
+        // Handle weather requests in English
+        $botman->hears('weather in {location}', function ($botman, $location) use ($context) {
+            handleWeatherRequest($botman, $location, '', $context);
+        });
 
         // attachment
         // --------------------------------
@@ -331,7 +325,7 @@ class ChatController extends AbstractController
         return $this->render('chat/frame.html.twig');
     }
 
-    private function fetchWeatherData(string $location): stdClass
+    function fetchWeatherData(string $location): stdClass
     {
         // Récupération de la clé API à partir de la variable d'environnement
         $weather_api_key= $this->parameterBag->get('WEATHER_API_KEY');
