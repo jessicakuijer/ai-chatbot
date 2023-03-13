@@ -288,7 +288,10 @@ class ChatController extends AbstractController
             'temperature' => 0.7,
             'max_tokens' => 150,
             'frequency_penalty' => 0.3,
-            'presence_penalty' => 0.5
+            'presence_penalty' => 0.5,
+            'n' => 1,
+            'stop' => null,
+            'best_of' => 1
         ]), true);
 
         if(array_key_exists('choices', $response) && array_key_exists(0, $response['choices']) && array_key_exists('text', $response['choices'][0])) {
