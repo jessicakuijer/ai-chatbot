@@ -286,7 +286,7 @@ class ChatController extends AbstractController
             'model' =>'text-davinci-003',
             'prompt' => $bot->getMessage()->getText(),
             'temperature' => 0.7,
-            'max_tokens' => 150,
+            'max_tokens' => 500,
             'frequency_penalty' => 0.3,
             'presence_penalty' => 0.5,
             'n' => 1,
