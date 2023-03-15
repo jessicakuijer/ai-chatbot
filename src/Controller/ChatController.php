@@ -6,7 +6,9 @@ use stdClass;
 use Google\Client as Google_Client;
 use Google\Service\YouTube as Google_Service_YouTube;
 use BotMan\BotMan\BotMan;
-use Orhanerday\OpenAi\OpenAi;
+use Tectalic\OpenAi\Manager;
+use Tectalic\OpenAi\Models\ChatCompletions\CreateRequest;
+use GuzzleHttp\Client;
 use BotMan\BotMan\BotManFactory;
 use BotMan\Drivers\Web\WebDriver;
 use BotMan\BotMan\Cache\SymfonyCache;
@@ -279,29 +281,34 @@ class ChatController extends AbstractController
         // fallback, nothing matched, go to openAI
         // --------------------------------
         
-        $botman->fallback(function (BotMan $bot) {
+       $botman->fallback(function (BotMan $bot) {
         $open_ai_key = $this->parameterBag->get('OPENAI_API_KEY');
-        $openai = new OpenAI($open_ai_key);
-        $response = json_decode($openai->completion([
-            'model' =>'text-davinci-003',
-            'prompt' => $bot->getMessage()->getText(),
-            'temperature' => 0.7,
-            'max_tokens' => 500,
-            'frequency_penalty' => 0.3,
-            'presence_penalty' => 0.5,
-            'n' => 1,
-            'stop' => null,
-            'best_of' => 1
-        ]), true);
+        $openaiClient = Manager::build(new Client(), new \Tectalic\OpenAi\Authentication($open_ai_key));
 
-        $decodedResponse = $response;
+        $response = $openaiClient->chatCompletions()->create(
+            new CreateRequest([
+                'model' => 'gpt-3.5-turbo',
+                'messages' => [
+                    ['role' => 'system', 'content' => 'You are a helpful assistant.'],
+                    ['role' => 'user', 'content' => $bot->getMessage()->getText()],
+                ],
+                'temperature' => 0.7,
+                'max_tokens' => 500,
+                'frequency_penalty' => 0.3,
+                'presence_penalty' => 0.5,
+                'n' => 1,
+                'stop' => null,
+                'best_of' => 1
+            ])
+        )->toModel();
 
         if (
-            array_key_exists('choices', $decodedResponse) &&
-            array_key_exists(0, $decodedResponse['choices']) &&
-            array_key_exists('text', $decodedResponse['choices'][0])
+            isset($response->choices) &&
+            isset($response->choices[0]) &&
+            isset($response->choices[0]->message) &&
+            isset($response->choices[0]->message->content)
         ) {
-            $result = $decodedResponse['choices'][0]['text'];
+            $result = $response->choices[0]->message->content;
             $bot->reply($result);
         } else {
             $bot->reply("Une erreur est survenue dans la réponse d'OpenAI.");
