@@ -294,11 +294,17 @@ class ChatController extends AbstractController
             'best_of' => 1
         ]), true);
 
-        if(array_key_exists('choices', $response) && array_key_exists(0, $response['choices']) && array_key_exists('text', $response['choices'][0])) {
-            $result = $response['choices'][0]['text'];
+        $decodedResponse = $response;
+
+        if (
+            array_key_exists('choices', $decodedResponse) &&
+            array_key_exists(0, $decodedResponse['choices']) &&
+            array_key_exists('text', $decodedResponse['choices'][0])
+        ) {
+            $result = $decodedResponse['choices'][0]['text'];
             $bot->reply($result);
         } else {
-            $bot->reply("Error occured in openai response");
+            $bot->reply("Une erreur est survenue dans la réponse d'OpenAI.");
         }
     });
 
