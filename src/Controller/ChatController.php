@@ -225,58 +225,34 @@ class ChatController extends AbstractController
         // Remote API: GNews
         // --------------------------------
         $botman->hears(
-            '(.*)actualités {search}',
-            function (BotMan $bot, $search) {
+            '^(?P<language>actualités|news) (?P<search>.*)$',
+            function (BotMan $bot, $language, $search) {
                 $api_key = $this->parameterBag->get('GNEWS_API_KEY');
-
+        
                 // Set the API endpoint and parameters
-                $url = 'https://gnews.io/api/v4/search?q=%s&lang=fr&token=' .$api_key;
+                $url = 'https://gnews.io/api/v4/search?q=%s&lang=%s&token=' . $api_key;
                 $params = [
-                    'lang' => 'fr',
+                    'lang' => ($language == 'actualités') ? 'fr' : 'en',
                     'token' => $api_key,
                     'q' => $search,
                 ];
-
+        
                 // Make the API request
                 $response = json_decode(file_get_contents($url . '?' . http_build_query($params)));
-
-                // Extracting the articles from the response
+        
+                // Extract the articles from the response
                 $articles = $response->articles;
-
+        
                 // Do something with the articles (e.g. reply with a message)
                 foreach ($articles as $article) {
                     $date = date('d-m-Y', strtotime($article->publishedAt));
-                    $bot->reply('Actualité : '.'<br>'.'<img style="width:200px;height:150px;" src="'. $article->image . '"/>'.'<br>'.'<a href="' . $article->url . '" target="_blank">' . $article->title . '</a>'.'<br>'.'Publié le : ' . $date . ' | Source : ' . $article->source->name);
-                }                    
-            }
-        );
-
-        $botman->hears(
-            '(.*)news {search}',
-            function (BotMan $bot, $search) {
-                $api_key = $this->parameterBag->get('GNEWS_API_KEY');
-
-                // Set the API endpoint and parameters
-                $url = 'https://gnews.io/api/v4/search?q=%s&lang=en&token=' . $api_key;
-                $params = [
-                    'lang' => 'fr',
-                    'token' => $api_key,
-                    'q' => $search,
-                ];
-
-                // Make the API request
-                $response = json_decode(file_get_contents($url . '?' . http_build_query($params)));
-
-                // Extract the articles from the response
-                $articles = $response->articles;
-
-                // Do something with the articles (e.g. reply with a message)
-                foreach ($articles as $article) {
-                    $date = date('m-d-Y', strtotime($article->publishedAt));
-                    $bot->reply('News : '.'<br>'.'<img style="width:200px;height:150px;" src="'. $article->image . '"/>'.'<br>'.'<a href="' . $article->url . '" target="_blank">' . $article->title . '</a>'.'<br>'.'Published at : ' . $date . ' | Origin : ' . $article->source->name);
+                    $source_label = ($language == 'actualités') ? 'Source' : 'Origin';
+                    $bot->reply(ucfirst($language) . ' : ' .'<br>'.'<img style="width:200px;height:150px;" src="'. $article->image . '"/>'.'<br>'.'<a href="' . $article->url . '" target="_blank">' . $article->title . '</a>'.'<br>'.'Publié le : ' . $date . ' | ' . $source_label . ' : ' . $article->source->name);
                 }
             }
         );
+        
+        
 
         // fallback, nothing matched, go to openAI
         // --------------------------------
