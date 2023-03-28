@@ -243,7 +243,7 @@ class ChatController extends AbstractController
                 // Extract the articles from the response
                 $articles = $response->articles;
         
-                // Do something with the articles (e.g. reply with a message)
+                // Do something with the articles (e.g. reply with source, title, date, image, url)
                 foreach ($articles as $article) {
                     $date = date('d-m-Y', strtotime($article->publishedAt));
                     $source_label = ($language == 'actualités') ? 'Source' : 'Origin';
