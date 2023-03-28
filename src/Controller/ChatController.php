@@ -239,10 +239,8 @@ class ChatController extends AbstractController
         
                 // Make the API request
                 $response = json_decode(file_get_contents($url . '?' . http_build_query($params)));
-        
                 // Extract the articles from the response
                 $articles = $response->articles;
-        
                 // Do something with the articles (e.g. reply with source, title, date, image, url)
                 foreach ($articles as $article) {
                     $date = date('d-m-Y', strtotime($article->publishedAt));
