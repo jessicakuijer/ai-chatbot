@@ -1,5 +1,5 @@
 <div align="center">
-  <h3>A symfony 6 Chatbot Demo using ChatGPT-3.5-turbo, Youtube, Giphy, WeatherStack apis...🇫🇷 🇺🇸</h3>
+  <h3>A symfony 6 Chatbot Demo using ChatGPT-4, Youtube, Giphy, WeatherStack apis...🇫🇷 🇺🇸</h3>
   <p>This is a symfony 6 Chatbot Demo by using [Botman](https://botman.io). <br>
   It can be used as Chatbot symfony 6 starter.</p>
   <p>
@@ -57,7 +57,7 @@ Admins can access /chat page for using AI-chatbot.
 
 [API Youtube data V3](https://developers.google.com/youtube/registering_an_application)  
 [API Giphy](https://support.giphy.com/hc/en-us/articles/360020283431-Request-A-GIPHY-API-Key)  
-[API OpenAI for ChatGPT-3.5-turbo PHP](https://github.com/tectalichq/public-openai-client-php)  
+[API OpenAI for ChatGPT-4 PHP](https://github.com/tectalichq/public-openai-client-php)  
 [API WeatherStack](https://weatherstack.com/)  
 [API GNews](https://gnews.io/)  
 

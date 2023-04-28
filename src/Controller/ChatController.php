@@ -263,7 +263,7 @@ class ChatController extends AbstractController
 
         $response = $openaiClient->chatCompletions()->create(
             new CreateRequest([
-                'model' => 'gpt-3.5-turbo',
+                'model' => 'gpt-4',
                 'messages' => [
                     ['role' => 'system', 'content' => 'You are a helpful assistant.'],
                     ['role' => 'user', 'content' => $bot->getMessage()->getText()],
