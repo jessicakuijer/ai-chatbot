@@ -28,6 +28,46 @@ class ChatController extends AbstractController
     public function __construct(ParameterBagInterface $parameterBag) {
         $this->parameterBag = $parameterBag;
     }
+
+    private function waitForOpenAiResponse($openaiClient, $text, $timeout = 20)
+{
+    $start_time = time();
+    $response = null;
+
+    while (time() - $start_time < $timeout) {
+        $response = $openaiClient->chatCompletions()->create(
+            new CreateRequest([
+                'model' => 'gpt-4',
+                'messages' => [
+                    ['role' => 'system', 'content' => 'You are a friendly chatbot.'],
+                    ['role' => 'user', 'content' => $text],
+                    ['role' => 'user', 'content' => 'Answer to everything I can reply as best as you can do and keep the conversation going.'],
+                ],
+                'temperature' => 0.7,
+                'max_tokens' => 500,
+                'frequency_penalty' => 0.3,
+                'presence_penalty' => 0.5,
+                'n' => 1,
+                'stop' => null,
+                'best_of' => 1
+            ])
+        )->toModel();
+
+        if (
+            isset($response->choices) &&
+            isset($response->choices[0]) &&
+            isset($response->choices[0]->message) &&
+            isset($response->choices[0]->message->content)
+        ) {
+            break;
+        }
+
+        sleep(1);
+    }
+
+    return $response;
+}
+
     
     #[Route('/chat', name: 'chat_index')]
     public function index(): Response
@@ -257,40 +297,25 @@ class ChatController extends AbstractController
         // fallback, nothing matched, go to openAI
         // --------------------------------
         
-       $botman->fallback(function (BotMan $bot) {
-        $open_ai_key = $this->parameterBag->get('OPENAI_API_KEY');
-        $openaiClient = Manager::build(new Client(), new \Tectalic\OpenAi\Authentication($open_ai_key));
-
-        $response = $openaiClient->chatCompletions()->create(
-            new CreateRequest([
-                'model' => 'gpt-4',
-                'messages' => [
-                    ['role' => 'system', 'content' => 'You are a friendly chatbot.'],
-                    ['role' => 'user', 'content' => $bot->getMessage()->getText()],
-                    ['role' => 'user', 'content' => 'Answer to everything I can reply as best as you can do and keep the conversation going.'],
-                ],
-                'temperature' => 0.7,
-                'max_tokens' => 500,
-                'frequency_penalty' => 0.3,
-                'presence_penalty' => 0.5,
-                'n' => 1,
-                'stop' => null,
-                'best_of' => 1
-            ])
-        )->toModel();
-
-        if (
-            isset($response->choices) &&
-            isset($response->choices[0]) &&
-            isset($response->choices[0]->message) &&
-            isset($response->choices[0]->message->content)
-        ) {
-            $result = $response->choices[0]->message->content;
-            $bot->reply($result);
-        } else {
-            $bot->reply("Une erreur est survenue dans la réponse d'OpenAI.");
-        }
-    });
+        $botman->fallback(function (BotMan $bot) {
+            $bot->typesAndWaits(2);
+            $open_ai_key = $this->parameterBag->get('OPENAI_API_KEY');
+            $openaiClient = Manager::build(new Client(), new \Tectalic\OpenAi\Authentication($open_ai_key));
+        
+            $response = $this->waitForOpenAiResponse($openaiClient, $bot->getMessage()->getText(), 60);
+        
+            if (
+                isset($response->choices) &&
+                isset($response->choices[0]) &&
+                isset($response->choices[0]->message) &&
+                isset($response->choices[0]->message->content)
+            ) {
+                $result = $response->choices[0]->message->content;
+                $bot->reply($result);
+            } else {
+                $bot->reply("Une erreur est survenue dans la réponse d'OpenAI.");
+            }
+        });        
 
         $botman->listen();
 
