@@ -29,7 +29,7 @@ class ChatController extends AbstractController
         $this->parameterBag = $parameterBag;
     }
 
-    private function waitForOpenAiResponse($openaiClient, $text, $timeout = 60)
+    private function waitForOpenAiResponse($openaiClient, $text, $timeout = 30)
 {
     $start_time = time();
     $response = null;
