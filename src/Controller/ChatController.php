@@ -29,7 +29,7 @@ class ChatController extends AbstractController
         $this->parameterBag = $parameterBag;
     }
 
-    private function waitForOpenAiResponse($openaiClient, $text, $timeout = 20)
+    private function waitForOpenAiResponse($openaiClient, $text, $timeout = 60)
 {
     $start_time = time();
     $response = null;
@@ -302,7 +302,7 @@ class ChatController extends AbstractController
             $open_ai_key = $this->parameterBag->get('OPENAI_API_KEY');
             $openaiClient = Manager::build(new Client(), new \Tectalic\OpenAi\Authentication($open_ai_key));
         
-            $response = $this->waitForOpenAiResponse($openaiClient, $bot->getMessage()->getText(), 60);
+            $response = $this->waitForOpenAiResponse($openaiClient, $bot->getMessage()->getText(), 30);
         
             if (
                 isset($response->choices) &&
