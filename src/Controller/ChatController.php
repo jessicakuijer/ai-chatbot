@@ -265,8 +265,9 @@ class ChatController extends AbstractController
             new CreateRequest([
                 'model' => 'gpt-4',
                 'messages' => [
-                    ['role' => 'system', 'content' => 'You are a helpful assistant.'],
+                    ['role' => 'system', 'content' => 'You are a friendly chatbot.'],
                     ['role' => 'user', 'content' => $bot->getMessage()->getText()],
+                    ['role' => 'user', 'content' => 'Answer to everything I can reply as best as you can do and keep the conversation going.'],
                 ],
                 'temperature' => 0.7,
                 'max_tokens' => 500,
