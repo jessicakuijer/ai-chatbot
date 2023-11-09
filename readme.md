@@ -1,5 +1,5 @@
 <div align="center">
-  <h3>A symfony 6 Chatbot Demo using ChatGPT-4, Youtube, Giphy, WeatherStack apis...🇫🇷 🇺🇸</h3>
+  <h3>A symfony 6 Chatbot Demo using ChatGPT-4-turbo, Youtube, Giphy, WeatherStack apis...🇫🇷 🇺🇸</h3>
   <p>This is a symfony 6 Chatbot Demo by using [Botman](https://botman.io). <br>
   It can be used as Chatbot symfony 6 starter.</p>
   <p>
