@@ -37,7 +37,7 @@ class ChatController extends AbstractController
     while (time() - $start_time < $timeout) {
         $response = $openaiClient->chatCompletions()->create(
             new CreateRequest([
-                'model' => 'gpt-4',
+                'model' => 'gpt-4-1106-preview',
                 'messages' => [
                     ['role' => 'system', 'content' => 'You are a friendly chatbot.'],
                     ['role' => 'user', 'content' => $text],
