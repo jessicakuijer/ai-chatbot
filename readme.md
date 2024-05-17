@@ -1,5 +1,5 @@
 <div align="center">
-  <h3>A symfony 6 Chatbot Demo using ChatGPT-4-turbo, Youtube, Giphy, WeatherStack apis...🇫🇷 🇺🇸</h3>
+  <h3>A symfony 6 Chatbot Demo using GPT-4o, Youtube, Giphy, WeatherStack apis...🇫🇷 🇺🇸</h3>
   <p>This is a symfony 6 Chatbot Demo by using [Botman](https://botman.io). <br>
   It can be used as Chatbot symfony 6 starter.</p>
   <p>
@@ -64,6 +64,6 @@ Admins can access /chat page for using AI-chatbot.
 Configure your environnement variables that you can find in services.yaml parameters and .env.local   
 ## licenses
 
-[MIT](./LICENSE) License © 2023  
+[MIT](./LICENSE) License © 2024  
 [@vikbert for CSS and botman starter](https://vikbert.github.io)  
 [@jessica kuijer](https://jessicakuijer.com)
