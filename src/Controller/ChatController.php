@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use stdClass;
+use App\Cache\CustomSymfonyCache;
 use Google\Client as Google_Client;
 use Google\Service\YouTube as Google_Service_YouTube;
 use BotMan\BotMan\BotMan;
@@ -76,10 +77,10 @@ class ChatController extends AbstractController
     }
 
     #[Route('/chat/message', name: 'chat_message')]
-    public function message(SymfonyCache $symfonyCache): Response
+    public function message(): Response
     {
         DriverManager::loadDriver(WebDriver::class);
-        $botman = BotManFactory::create([], $symfonyCache);
+        $botman = BotManFactory::create([], new CustomSymfonyCache());
         $botman->middleware->received(new ReceiveMiddleware());
 
         // basic
