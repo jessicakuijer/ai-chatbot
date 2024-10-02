@@ -3,15 +3,12 @@
 namespace App\Controller;
 
 use stdClass;
-use App\Cache\CustomSymfonyCache;
-use Google\Client as Google_Client;
-use Google\Service\YouTube as Google_Service_YouTube;
+use Anthropic;
 use BotMan\BotMan\BotMan;
-use Tectalic\OpenAi\Manager;
-use Tectalic\OpenAi\Models\ChatCompletions\CreateRequest;
-use GuzzleHttp\Client;
 use BotMan\BotMan\BotManFactory;
+use App\Cache\CustomSymfonyCache;
 use BotMan\Drivers\Web\WebDriver;
+use Google\Client as Google_Client;
 use BotMan\BotMan\Cache\SymfonyCache;
 use BotMan\BotMan\Drivers\DriverManager;
 use App\ChatBot\Middleware\ReceiveMiddleware;
@@ -21,53 +18,46 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\ChatBot\Conversation\QuestionConversation;
 use App\ChatBot\Conversation\OnBoardingConversation;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
+use Google\Service\YouTube as Google_Service_YouTube;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class ChatController extends AbstractController
 {   
-    public function __construct(ParameterBagInterface $parameterBag) {
+    private $anthropicClient;
+    private $parameterBag;
+
+    public function __construct(ParameterBagInterface $parameterBag)
+    {
         $this->parameterBag = $parameterBag;
+        $this->anthropicClient = Anthropic::factory()
+            ->withApiKey($this->parameterBag->get('CLAUDE_API_KEY'))
+            ->withHttpHeader('anthropic-version', '2023-06-01') // Ajout de l'en-tête de version
+            ->make();
     }
 
-    private function waitForOpenAiResponse($openaiClient, $text, $timeout = 30)
-{
-    $start_time = time();
-    $response = null;
-
-    while (time() - $start_time < $timeout) {
-        $response = $openaiClient->chatCompletions()->create(
-            new CreateRequest([
-                'model' => 'gpt-4o',
+    private function waitForClaudeResponse($text, $timeout = 30)
+    {
+        try {
+            $response = $this->anthropicClient->messages()->create([
+                'model' => 'claude-3-5-sonnet-20240620',
+                'max_tokens' => 500,
                 'messages' => [
-                    ['role' => 'system', 'content' => 'You are a friendly chatbot.'],
                     ['role' => 'user', 'content' => $text],
-                    ['role' => 'user', 'content' => 'Answer to everything I can reply as best as you can do and keep the conversation going.'],
                 ],
                 'temperature' => 0.7,
-                'max_tokens' => 500,
-                'frequency_penalty' => 0.3,
-                'presence_penalty' => 0.5,
-                'n' => 1,
-                'stop' => null,
-                'best_of' => 1
-            ])
-        )->toModel();
+            ]);
 
-        if (
-            isset($response->choices) &&
-            isset($response->choices[0]) &&
-            isset($response->choices[0]->message) &&
-            isset($response->choices[0]->message->content)
-        ) {
-            break;
+            if ($response && isset($response->content[0]->text)) {
+                return $response->content[0]->text;
+            }
+        } catch (\Exception $e) {
+            error_log('Erreur Claude API: ' . $e->getMessage());
+            return "Je suis désolé, mais je rencontre actuellement des difficultés techniques. Erreur : " . $e->getMessage();
         }
 
-        sleep(1);
+        return "Je n'ai pas pu générer une réponse appropriée. Pouvez-vous reformuler votre question ?";
     }
-
-    return $response;
-}
 
     
     #[Route('/chat', name: 'chat_index')]
@@ -295,28 +285,14 @@ class ChatController extends AbstractController
         
         
 
-        // fallback, nothing matched, go to openAI
+        // fallback, nothing matched, go to Claude Anthropic API
         // --------------------------------
         
         $botman->fallback(function (BotMan $bot) {
             $bot->typesAndWaits(2);
-            $open_ai_key = $this->parameterBag->get('OPENAI_API_KEY');
-            $openaiClient = Manager::build(new Client(), new \Tectalic\OpenAi\Authentication($open_ai_key));
-        
-            $response = $this->waitForOpenAiResponse($openaiClient, $bot->getMessage()->getText(), 30);
-        
-            if (
-                isset($response->choices) &&
-                isset($response->choices[0]) &&
-                isset($response->choices[0]->message) &&
-                isset($response->choices[0]->message->content)
-            ) {
-                $result = $response->choices[0]->message->content;
-                $bot->reply($result);
-            } else {
-                $bot->reply("Une erreur est survenue dans la réponse d'OpenAI.");
-            }
-        });        
+            $result = $this->waitForClaudeResponse($bot->getMessage()->getText(), 30);
+            $bot->reply($result);
+        });
 
         $botman->listen();
 

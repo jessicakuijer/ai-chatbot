@@ -51,13 +51,13 @@ Admins can access /chat page for using AI-chatbot.
 - "give me a youtube movie back to the future" or "donne moi une vidéo youtube chats"  
 - "news trump" or "actualités pierre palmade"
 - "prévision météo à paris" or "weather in new york"
-- THEN... ask for everything you want, AI chatGPT will give you answers.  🤖
+- THEN... ask for everything you want, AI Claude Anthropic Sonnet 3.5 will give you answers.  🤖
 
 ## API used in POC (you have to get your own api keys as environnement variables)
 
 [API Youtube data V3](https://developers.google.com/youtube/registering_an_application)  
 [API Giphy](https://support.giphy.com/hc/en-us/articles/360020283431-Request-A-GIPHY-API-Key)  
-[API OpenAI for ChatGPT-4 PHP](https://github.com/tectalichq/public-openai-client-php)  
+[API Anthropic Claude bundle PHP](https://github.com/mozex/anthropic-php)  
 [API WeatherStack](https://weatherstack.com/)  
 [API GNews](https://gnews.io/)  
 
