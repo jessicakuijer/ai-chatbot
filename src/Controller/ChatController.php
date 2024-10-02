@@ -41,7 +41,7 @@ class ChatController extends AbstractController
         try {
             $response = $this->anthropicClient->messages()->create([
                 'model' => 'claude-3-5-sonnet-20240620',
-                'max_tokens' => 500,
+                'max_tokens' => 1500,
                 'messages' => [
                     ['role' => 'user', 'content' => $text],
                 ],
@@ -291,7 +291,16 @@ class ChatController extends AbstractController
         $botman->fallback(function (BotMan $bot) {
             $bot->typesAndWaits(2);
             $result = $this->waitForClaudeResponse($bot->getMessage()->getText(), 30);
-            $bot->reply($result);
+            
+            // gestion des réponses longues
+            if (strlen($result) > 2000) {
+                $chunks = str_split($result, 2000);
+                foreach ($chunks as $chunk) {
+                    $bot->reply($chunk);
+                }
+            } else {
+                $bot->reply($result);
+            }
         });
 
         $botman->listen();
